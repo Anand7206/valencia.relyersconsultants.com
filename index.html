@@ -2106,7 +2106,12 @@
           <div class="carousel-track" id="galleryTrack">
             <!-- Slide 1 -->
             <div class="gallery-slide">
-              <img src="./assets/gallery-1.jpg" alt="Tower Facade - Artist's Impression" width="1200" height="440" onclick="openLightbox('./assets/gallery-1.jpg', 'Iconic Tower Facade')">
+              <img src="./assets/gallery-1.jpg"
+                   data-fallback="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1400&q=80"
+                   alt="Iconic Tower Facade - Artist's Impression"
+                   width="1200" height="440"
+                   onerror="handleGalleryImgFallback(this)"
+                   onclick="openLightbox(this.src, 'Iconic Tower Facade')">
               <div class="slide-caption-bar">
                 <span>Iconic Tower Facade</span>
                 <span class="caption-badge">Artist's Impression</span>
@@ -2115,7 +2120,12 @@
 
             <!-- Slide 2 -->
             <div class="gallery-slide">
-              <img src="./assets/gallery-2.jpg" alt="Grand Entrance Lobby - Artist's Impression" width="1200" height="440" onclick="openLightbox('./assets/gallery-2.jpg', 'Grand Entrance Lobby')">
+              <img src="./assets/gallery-2.jpg"
+                   data-fallback="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80"
+                   alt="Grand Entrance Lobby - Artist's Impression"
+                   width="1200" height="440"
+                   onerror="handleGalleryImgFallback(this)"
+                   onclick="openLightbox(this.src, 'Grand Entrance Lobby')">
               <div class="slide-caption-bar">
                 <span>Grand Air-Conditioned Lobby</span>
                 <span class="caption-badge">Artist's Impression</span>
@@ -2124,7 +2134,12 @@
 
             <!-- Slide 3 -->
             <div class="gallery-slide">
-              <img src="./assets/gallery-3.jpg" alt="Master Living & Deck - Artist's Impression" width="1200" height="440" onclick="openLightbox('./assets/gallery-3.jpg', 'Master Living & Deck')">
+              <img src="./assets/gallery-3.jpg"
+                   data-fallback="https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1400&q=80"
+                   alt="Master Living & Deck - Artist's Impression"
+                   width="1200" height="440"
+                   onerror="handleGalleryImgFallback(this)"
+                   onclick="openLightbox(this.src, 'Master Living & Deck')">
               <div class="slide-caption-bar">
                 <span>Master Living &amp; Riverfront Balcony</span>
                 <span class="caption-badge">Artist's Impression</span>
@@ -2133,7 +2148,12 @@
 
             <!-- Slide 4 -->
             <div class="gallery-slide">
-              <img src="./assets/gallery-4.jpg" alt="Infinity Swimming Pool - Artist's Impression" width="1200" height="440" onclick="openLightbox('./assets/gallery-4.jpg', 'Infinity Swimming Pool')">
+              <img src="./assets/gallery-4.jpg"
+                   data-fallback="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=1400&q=80"
+                   alt="Infinity Swimming Pool - Artist's Impression"
+                   width="1200" height="440"
+                   onerror="handleGalleryImgFallback(this)"
+                   onclick="openLightbox(this.src, 'Infinity Swimming Pool')">
               <div class="slide-caption-bar">
                 <span>Infinity Swimming Pool &amp; Lounge</span>
                 <span class="caption-badge">Artist's Impression</span>
@@ -2142,7 +2162,12 @@
 
             <!-- Slide 5 -->
             <div class="gallery-slide">
-              <img src="./assets/gallery-5.jpg" alt="Master Suite Interior - Artist's Impression" width="1200" height="440" onclick="openLightbox('./assets/gallery-5.jpg', 'Master Suite Interior')">
+              <img src="./assets/gallery-5.jpg"
+                   data-fallback="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1400&q=80"
+                   alt="Master Suite Interior - Artist's Impression"
+                   width="1200" height="440"
+                   onerror="handleGalleryImgFallback(this)"
+                   onclick="openLightbox(this.src, 'Master Suite Interior')">
               <div class="slide-caption-bar">
                 <span>Master Bedroom &amp; Walk-in Wardrobe</span>
                 <span class="caption-badge">Artist's Impression</span>
@@ -2151,7 +2176,12 @@
 
             <!-- Slide 6 -->
             <div class="gallery-slide">
-              <img src="./assets/gallery-6.jpg" alt="Landscaped Grounds - Artist's Impression" width="1200" height="440" onclick="openLightbox('./assets/gallery-6.jpg', 'Landscaped Grounds')">
+              <img src="./assets/gallery-6.jpg"
+                   data-fallback="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1400&q=80"
+                   alt="Landscaped Grounds - Artist's Impression"
+                   width="1200" height="440"
+                   onerror="handleGalleryImgFallback(this)"
+                   onclick="openLightbox(this.src, 'Landscaped Grounds')">
               <div class="slide-caption-bar">
                 <span>Themed Landscaped Gardens</span>
                 <span class="caption-badge">Artist's Impression</span>
@@ -2712,6 +2742,48 @@
       img.removeAttribute('srcset');
       img.src = EMBEDDED_LOGO_B64;
     }
+
+    
+    function handleGalleryImgFallback(img) {
+      if (img.dataset.failed === "root") {
+        img.onerror = null;
+        if (img.dataset.fallback) {
+          img.src = img.dataset.fallback;
+        }
+      } else if (!img.dataset.failed) {
+        img.dataset.failed = "root";
+        var parts = img.getAttribute('src').split('/');
+        var filename = parts[parts.length - 1];
+        img.src = './' + filename;
+      }
+    }
+
+    // Auto-detect and set Hero background with triple-layer fallback
+    (function initHeroBackground() {
+      function setHeroBg(url) {
+        var hero = document.getElementById('hero');
+        if (hero) {
+          hero.style.backgroundImage = "linear-gradient(180deg, rgba(23, 22, 21, 0.80) 0%, rgba(18, 17, 16, 0.90) 100%), url('" + url + "')";
+        }
+      }
+      var cdnHero = 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1600&q=80';
+      var primarySrc = './assets/hero.jpg';
+      var testImg = new Image();
+      testImg.onload = function() {
+        setHeroBg(primarySrc);
+      };
+      testImg.onerror = function() {
+        var rootImg = new Image();
+        rootImg.onload = function() {
+          setHeroBg('./hero.jpg');
+        };
+        rootImg.onerror = function() {
+          setHeroBg(cdnHero);
+        };
+        rootImg.src = './hero.jpg';
+      };
+      testImg.src = primarySrc;
+    })();
 
     function handleImgFallback(img) {
       if (img.dataset.failed) return;
